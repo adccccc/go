@@ -1,0 +1,11 @@
+From golang:1.17 AS builder
+ENV CGO_ENALBED=0
+ENV GO111MODULE=on
+ENV GOOS=linux
+ENV GOPROXY=https://goproxy.cn,direct
+WORKDIR /work
+RUN go build -o httpserver .
+
+FROM scratch
+COPY --from=builder /work/httpserver /httpserver
+ENTRYPOINT ["/httpserver"]
